@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fijación de Precios | CDN Sercotec Temuco</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/x-icon" href="https://i.postimg.cc/kgDCs5xX/imagen-2026-01-08-145205602-preview-rev-1.png">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+
+    <style>
+        /* === IDENTIDAD VISUAL SERCOTEC & CDN === */
+        :root {
+            --sercotec-blue: #004B8D;
+            --sercotec-dark: #1d3557;
+            --sercotec-red: #E30613;
+            --sercotec-light-blue: #ebf2fa;
+            --text-main: #343a40;
+            --text-muted: #6c757d;
+            --bg-body: #f8f9fa;
+        }
+
+         body {
+            background: linear-gradient(to bottom, #ffffff, #f8f9fa); /* Gradiente sutil */
+            font-family: 'Roboto', sans-serif;
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* === HEADER === */
+        .navbar-custom {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border-top: 4px solid var(--sercotec-red);
+            padding: 15px 0;
+        }
+        .brand-text h1 { font-size: 1.25rem; font-weight: 700; margin: 0; color: var(--sercotec-blue); }
+        .brand-text p { font-size: 0.85rem; margin: 0; color: var(--text-muted); }
+
+        /* === CARDS & PANELES === */
+        .card-custom {
+            border: none;
+            border-radius: 12px;
+            background: white;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            margin-bottom: 20px;
+        }
+        .card-header-custom {
+            background-color: white;
+            border-bottom: 1px solid #f0f0f0;
+            padding: 15px 20px;
+            font-weight: 600;
+            color: var(--sercotec-blue);
+            border-radius: 12px 12px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* === INPUTS === */
+        .form-label { font-size: 0.8rem; font-weight: 600; color: #555; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+        .form-control, .form-select {
+            border-radius: 6px;
+            border: 1px solid #dee2e6;
+            font-size: 0.9rem;
+            padding: 8px 12px;
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: var(--sercotec-blue);
+            box-shadow: 0 0 0 3px rgba(0, 75, 141, 0.1);
+        }
+        .input-group-text { background-color: #f8f9fa; border: 1px solid #dee2e6; color: #666; }
+
+        /* === BOTONES === */
+        .btn-primary-custom {
+            background-color: var(--sercotec-blue);
+            border: none;
+            padding: 10px;
+            font-weight: 600;
+            transition: background 0.2s;
+            color: white;
+        }
+        .btn-primary-custom:hover { background-color: var(--sercotec-dark); }
+        .btn-outline-custom { border: 1px solid #ccc; color: #555; font-weight: 500; }
+        .btn-outline-custom:hover { background-color: #f0f0f0; color: #333; }
+
+        /* === SELECTOR MODO COSTOS === */
+        .btn-check:checked + .btn-outline-custom {
+            background-color: var(--sercotec-blue);
+            color: white;
+            border-color: var(--sercotec-blue);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        /* === TABS === */
+        .nav-tabs {
+            border-bottom: 2px solid #e9ecef;
+            gap: 4px;
+        }
+        .nav-tabs .nav-link {
+            color: #6c757d;
+            font-weight: 500;
+            border: none;
+            border-radius: 8px 8px 0 0;
+            padding: 12px 20px;
+            transition: all 0.3s ease;
+            background-color: transparent;
+            position: relative;
+        }
+        .nav-tabs .nav-link:hover {
+            color: var(--sercotec-blue);
+            background-color: rgba(0, 75, 141, 0.04);
+        }
+        .nav-tabs .nav-link.active {
+            color: var(--sercotec-blue);
+            font-weight: 700;
+            background-color: white;
+            box-shadow: 0 -3px 0 var(--sercotec-red) inset, 0 -5px 10px rgba(0,0,0,0.03);
+            border-bottom: 2px solid white;
+            margin-bottom: -2px;
+        }
+        .tab-content {
+            background-color: white;
+            padding: 20px;
+            border: 1px solid #e9ecef;
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+        }
+
+        /* === TABLA COMPARATIVA === */
+        .table-custom thead {
+            background-color: var(--sercotec-light-blue);
+        }
+        .table-custom thead th {
+            color: var(--sercotec-dark);
+            font-size: 0.75rem;
+            text-align: center;
+            border-bottom: 2px solid #fff;
+            vertical-align: middle;
+            padding: 10px 6px;
+            text-transform: uppercase;
+        }
+        .table-custom tbody td {
+            font-size: 0.85rem;
+            padding: 8px 6px;
+            vertical-align: middle;
+            text-align: right;
+        }
+        .table-custom .concepto-col {
+            text-align: left;
+            font-weight: 600;
+            background-color: #fff;
+        }
+        .temporada-tag {
+            font-size: 0.7rem;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+            text-transform: uppercase;
+            display: inline-block;
+        }
+        .temporada-avance { background-color: #28a745; color: white; }
+        .temporada-normal { background-color: #17a2b8; color: white; }
+        .temporada-liquidacion { background-color: #ffc107; color: #333; }
+        .temporada-remate { background-color: #dc3545; color: white; }
+
+        /* === BADGE TIPO NEGOCIO === */
+        .badge-negocio {
+            font-size: 0.75rem;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+        .tipo-minimarket { background-color: #28a745; color: white; }
+        .tipo-ferreteria { background-color: #fd7e14; color: white; }
+        .tipo-boutique { background-color: #e83e8c; color: white; }
+        .tipo-restaurante { background-color: #6f42c1; color: white; }
+
+        /* === TOOLTIP PERSONALIZADO === */
+        .tooltip-container {
+            position: relative;
+            display: inline-block;
+            margin-left: 5px;
+            cursor: help;
+            vertical-align: text-bottom;
+        }
+        .tooltip-container i {
+            color: var(--sercotec-blue);
+            font-size: 0.95rem;
+        }
+        .tooltip-text {
+            visibility: hidden;
+            width: 220px;
+            background-color: var(--sercotec-dark);
+            color: #ffffff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 12px 14px;
+            position: absolute;
+            z-index: 100;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.2s ease-in-out;
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-transform: none;
+            line-height: 1.4;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            pointer-events: none;
+            white-space: normal;
+            word-wrap: break-word;
+        }
+        .tooltip-text::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 6px;
+            border-style: solid;
+            border-color: var(--sercotec-dark) transparent transparent transparent;
+        }
+        .tooltip-container:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* === CORRECCIONES TABLA DESCUENTO === */
+        .table-custom tbody td.descuento-real {
+            text-align: center;
+            font-weight: 600;
+            color: var(--sercotec-blue);
+            background-color: #f8fbff;
+            font-size: 0.9rem;
+        }
+
+        /* === FOOTER === */
+        .footer-custom {
+            margin-top: auto !important;
+            margin-bottom: 0 !important;
+            background-color: #212529;
+            color: #ccc;
+            padding: 40px 0 20px;
+            font-size: 0.9rem;
+            border-top: 5px solid var(--sercotec-red);
+            flex-shrink: 0;
+            width: 100%;
+        }
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 0px;
+        }
+        .footer-title { color: white; font-weight: 700; margin-bottom: 15px; font-size: 1.1rem; }
+        .footer-link { color: #ccc; text-decoration: none; transition: color 0.2s; display: block; margin-bottom: 8px; }
+        .footer-link:hover { color: white; text-decoration: none; }
+        .footer-social a { color: white; font-size: 1.8rem; margin-right: 15px; transition: opacity 0.2s; }
+        .footer-social a:hover { opacity: 0.7; }
+        .footer-divider { border-color: #444; margin: 20px 0; }
+
+        /* === PRINT STYLES === */
+        @media print {
+            @page { size: landscape; margin: 1cm; }
+            .no-print, .btn, .navbar-custom, .footer-custom, nav { display: none !important; }
+            body { background: white; padding: 0; }
+            .card-custom { box-shadow: none !important; border: 1px solid #ddd !important; }
+            .tab-pane { display: block !important; opacity: 1 !important; }
+        }
+
+    </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<nav class="navbar navbar-custom sticky-top no-print">
+    <div class="container-fluid px-4">
+        <div class="d-flex align-items-center">
+            <img src="https://www.sercotec.cl/centros-de-negocios/wp-content/uploads/sites/4/2020/09/la-araucania-temuco-cdn-logo.png" alt="Sercotec" height="85" class="me-3">
+            <div class="brand-text border-start ps-3 border-2">
+                <h1>Fijación de Precios</h1>
+                <p>Herramienta de Gestión Comercial</p>
+            </div>
+        </div>
+        <div class="d-flex gap-2 no-print">
+            <button class="btn btn-outline-custom btn-sm" onclick="limpiarDatos()"><i class="bi bi-eraser"></i> Limpiar</button>
+            <button class="btn btn-primary-custom btn-sm text-white" onclick="generarPDF()"><i class="bi bi-file-earmark-pdf"></i> Generar PDF</button>
+        </div>
+    </div>
+</nav>
+
+<!-- MAIN CONTENT -->
+<div class="container-fluid px-4 py-4 flex-grow-1">
+    <div class="row g-4">
+        <!-- PANEL LATERAL CONFIGURACIÓN -->
+        <div class="col-lg-3 no-print">
+            <div class="card-custom">
+                <div class="card-header-custom">
+                    <span><i class="bi bi-gear"></i> Configuración General</span>
+                </div>
+                <div class="card-body p-3">
+                    <form id="configForm">
+                        <!-- TIPO DE NEGOCIO -->
+                        <div class="mb-3">
+                            <label class="form-label">Tipo de Negocio</label>
+                            <select class="form-select" id="tipoNegocio" onchange="aplicarPerfilNegocio()">
+                                <option value="minimarket">Minimarket (Alta Rotación)</option>
+                                <option value="ferreteria">Ferretería (Inventario Estable)</option>
+                                <option value="boutique">Boutique/Ropa (Margen Premium)</option>
+                                <option value="restaurante">Restaurante (Perecederos)</option>
+                            </select>
+                        </div>
+
+                        <hr>
+
+                        <!-- DATOS GENERALES DEL NEGOCIO -->
+                        <h6 class="text-sercotec mb-3"><i class="bi bi-building"></i> Datos del Negocio</h6>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Nombre del Negocio</label>
+                            <input type="text" class="form-control" id="nombreNegocio" placeholder="Ej: Ferretería El Constructor">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Número de Orden</label>
+                            <input type="text" class="form-control" id="numeroOrden" placeholder="Ej: 001">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Mes</label>
+                            <select class="form-select" id="mesOrden">
+                                <option value="Enero">Enero</option>
+                                <option value="Febrero">Febrero</option>
+                                <option value="Marzo">Marzo</option>
+                                <option value="Abril">Abril</option>
+                                <option value="Mayo">Mayo</option>
+                                <option value="Junio">Junio</option>
+                                <option value="Julio">Julio</option>
+                                <option value="Agosto">Agosto</option>
+                                <option value="Septiembre">Septiembre</option>
+                                <option value="Octubre">Octubre</option>
+                                <option value="Noviembre">Noviembre</option>
+                                <option value="Diciembre">Diciembre</option>
+                            </select>
+                        </div>
+
+                        <hr>
+
+                        <!-- MODO DE COSTOS -->
+                        <div class="mb-3">
+                            <label class="form-label">Distribución de Costos</label>
+                            <div class="d-flex gap-2">
+                                <input type="radio" class="btn-check" name="modoCostos" id="modoIndividual" value="individual" checked onchange="toggleModoCostos()">
+                                <label class="btn btn-outline-custom w-50 py-2" for="modoIndividual">
+                                    <i class="bi bi-box-seam me-1"></i> Individual
+                                </label>
+
+                                <input type="radio" class="btn-check" name="modoCostos" id="modoGlobal" value="global" onchange="toggleModoCostos()">
+                                <label class="btn btn-outline-custom w-50 py-2" for="modoGlobal">
+                                    <i class="bi bi-globe me-1"></i> Global
+                                </label>
+                            </div>
+                        </div>
+
+                        <div id="costosGlobalesContainer" style="display:none;">
+                            <div class="mb-3">
+                                <label class="form-label">Flete Total Orden</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input type="text" class="form-control" id="fleteGlobal" placeholder="0" oninput="formatoMonedaInput(this); recalcularTodosProductos()">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Gastos Grales. Totales</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input type="text" class="form-control" id="gastosGlobal" placeholder="0" oninput="formatoMonedaInput(this); recalcularTodosProductos()">
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- PANEL PRINCIPAL PRODUCTOS -->
+        <div class="col-lg-9">
+            <div class="card-custom">
+                <div class="card-header-custom">
+                    <span><i class="bi bi-tags"></i> Productos y Precios</span>
+                    <button class="btn btn-sm btn-primary-custom" onclick="agregarProducto()">
+                        <i class="bi bi-plus-circle"></i> Nuevo Producto
+                    </button>
+                </div>
+                <div class="card-body">
+                    <!-- TABS DE PRODUCTOS -->
+                    <ul class="nav nav-tabs mb-4" id="productTabs" role="tablist">
+                        <li class="nav-item">
+                            <button class="nav-link active" id="tab-producto-1" data-bs-toggle="tab" data-bs-target="#producto-1" type="button">
+                                Producto 1
+                            </button>
+                        </li>
+                    </ul>
+
+                    <!-- CONTENIDO DE TABS -->
+                    <div class="tab-content" id="productTabContent">
+                        <div class="tab-pane fade show active" id="producto-1" role="tabpanel">
+                            <div class="d-flex justify-content-end mb-3">
+                                <button class="btn btn-outline-danger btn-sm btn-eliminar-producto" onclick="eliminarProducto(1, event)" title="Eliminar este producto">
+                                    <i class="bi bi-trash"></i> Eliminar Producto
+                                </button>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">Detalle del Producto</label>
+                                    <input type="text" class="form-control producto-detalle" placeholder="Ej: Pantalón" oninput="actualizarNombreTab(1)">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">Precio de Compra Unit. con IVA</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">$</span>
+                                        <input type="text" class="form-control producto-precio-compra" placeholder="3.000" oninput="formatoMonedaInput(this); calcularProducto(1)">
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">Precio de Compra Total con IVA</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">$</span>
+                                        <input type="text" class="form-control producto-precio-compra-total" placeholder="3.000.000" oninput="formatoMonedaInput(this)">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">Unidades Compradas</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control producto-unidades" placeholder="Ej: 100" oninput="inputUnidades(this, 1)">
+                                        <span class="input-group-text"><i class="bi bi-box-seam"></i></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">Flete Total Producto</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">$</span>
+                                        <input type="text" class="form-control producto-flete" placeholder="0" oninput="formatoMonedaInput(this); calcularProducto(1)">
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">(Gastos Generales + Costos Indirectos)</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">$</span>
+                                        <input type="text" class="form-control producto-gastos" placeholder="0" oninput="formatoMonedaInput(this); calcularProducto(1)">
+                                    </div>
+                            </div>
+
+                            <!-- TABLA DE TEMPORADAS -->
+                            <h6 class="mt-4 mb-3"><i class="bi bi-calendar-range"></i> Escenarios de Precio por Temporada</h6>
+                            <div class="table-responsive">
+                                <table class="table table-sm table-custom tabla-temporadas" id="tabla-producto-1">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 15%;">Temporada</th>
+                                            <th style="width: 10%;">Margen %</th>
+                                            <th style="width: 12%;">Precio Neto</th>
+                                            <th style="width: 11%;">Utilidad</th>
+                                            <th style="width: 11%;">IVA Débito</th>
+                                            <th style="width: 12%;">Precio Mínimo</th>
+                                            <th style="width: 13%;">Precio Sugerido</th>
+                                            <th style="width: 13%;">
+                                                Desc. Real %
+                                                </div>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr data-temporada="avance">
+                                            <td class="concepto-col"><span class="temporada-tag temporada-avance">Avance</span></td>
+                                            <td><input type="number" class="form-control form-control-sm margen-input" value="50" step="1" oninput="calcularProducto(1)"></td>
+                                            <td class="precio-neto">$0</td>
+                                            <td class="utilidad">$0</td>
+                                            <td class="iva-debito">$0</td>
+                                            <td class="precio-minimo">$0</td>
+                                            <td><input type="text" class="form-control form-control-sm precio-sugerido-input" placeholder="$0" oninput="formatoMonedaInput(this); calcularDescuentoReal(this, 1)"></td>
+                                            <td class="descuento-real">0.00%</td>
+                                        </tr>
+                                        <tr data-temporada="temporada">
+                                            <td class="concepto-col"><span class="temporada-tag temporada-normal">Temporada</span></td>
+                                            <td><input type="number" class="form-control form-control-sm margen-input" value="33" step="1" oninput="calcularProducto(1)"></td>
+                                            <td class="precio-neto">$0</td>
+                                            <td class="utilidad">$0</td>
+                                            <td class="iva-debito">$0</td>
+                                            <td class="precio-minimo">$0</td>
+                                            <td><input type="text" class="form-control form-control-sm precio-sugerido-input" placeholder="$0" oninput="formatoMonedaInput(this); calcularDescuentoReal(this, 1)"></td>
+                                            <td class="descuento-real">0.00%</td>
+                                        </tr>
+                                        <tr data-temporada="liquidacion">
+                                            <td class="concepto-col"><span class="temporada-tag temporada-liquidacion">Liquidación</span></td>
+                                            <td><input type="number" class="form-control form-control-sm margen-input" value="10" step="1" oninput="calcularProducto(1)"></td>
+                                            <td class="precio-neto">$0</td>
+                                            <td class="utilidad">$0</td>
+                                            <td class="iva-debito">$0</td>
+                                            <td class="precio-minimo">$0</td>
+                                            <td><input type="text" class="form-control form-control-sm precio-sugerido-input" placeholder="$0" oninput="formatoMonedaInput(this); calcularDescuentoReal(this, 1)"></td>
+                                            <td class="descuento-real">0.00%</td>
+                                        </tr>
+                                        <tr data-temporada="remate">
+                                            <td class="concepto-col"><span class="temporada-tag temporada-remate">Remate</span></td>
+                                            <td><input type="number" class="form-control form-control-sm margen-input" value="1" step="1" oninput="calcularProducto(1)"></td>
+                                            <td class="precio-neto">$0</td>
+                                            <td class="utilidad">$0</td>
+                                            <td class="iva-debito">$0</td>
+                                            <td class="precio-minimo">$0</td>
+                                            <td><input type="text" class="form-control form-control-sm precio-sugerido-input" placeholder="$0" oninput="formatoMonedaInput(this); calcularDescuentoReal(this, 1)"></td>
+                                            <td class="descuento-real">0.00%</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- RESUMEN DE COSTOS -->
+                            <div class="alert alert-light border mt-4">
+                                <div class="row small">
+                                    <div class="col-md-4">
+                                        <strong>Flete C/U:</strong> <span class="flete-unitario">$0</span>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <strong>Gastos Grales. C/U:</strong> <span class="gastos-unitario">$0</span>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <strong>Costo Unitario Total:</strong> <span class="costo-unitario-total fw-bold text-primary">$0</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer-custom no-print">
+    <div class="footer-content">
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <h5 class="footer-title">Síguenos</h5>
+                <div class="footer-social mt-3">
+                    <a href="https://www.instagram.com/cdntemuco?igsh=N3A3enRscWc4bzFw" target="_blank"><i class="bi bi-instagram"></i></a>
+                    <a href="https://www.facebook.com/cdnsercotectemuco" target="_blank"><i class="bi bi-facebook"></i></a>
+                    <a href="https://www.sercotec.cl/centros-de-negocios/centro-de-desarrollo-de-negocios-temuco​/" target="_blank"><i class="bi bi-globe"></i></a>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <h5 class="footer-title">Contacto</h5>
+                <p class="mb-2"><i class="bi bi-geo-alt me-2 text-danger"></i> D. Portales N°806 - 4° Piso, Temuco</p>
+                <p class="mb-2"><i class="bi bi-envelope me-2 text-danger"></i> centro.temuco@centrossercotec.cl</p>
+                <p class="mb-2"><i class="bi bi-telephone me-2 text-danger"></i> +56 45 2 596 773</p>
+                <p class="mb-2"><i class="bi bi-clock me-2 text-danger"></i> Lun - Vie: 09:00 - 18:00</p>
+            </div>
+            <div class="col-md-4 mb-4">
+                <h5 class="footer-title">Enlaces de Interés</h5>
+                <a href="https://www.sercotec.cl" class="footer-link">Sitio Web Sercotec</a>
+                <a href="https://capacitacion.sercotec.cl" class="footer-link">Portal de Capacitación</a>
+            </div>
+        </div>
+        <hr class="footer-divider">
+        <div class="row align-items-center">
+            <div class="col-md-6 text-center text-md-start">
+                <small>&copy; 2026 - Centro de Negocios Sercotec Temuco. Todos los derechos reservados.</small>
+            </div>
+            <div class="col-md-6 text-center text-md-end mt-2 mt-md-0">
+                <img src="https://www.sercotec.cl/wp-content/uploads/2018/08/logo.png" alt="Sercotec Blanco" height="30" style="opacity: 0.6;">
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const fmt = new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP', minimumFractionDigits: 0 });
+    let contadorProductos = 1;
+
+    // === PERFILES DE NEGOCIO ===
+    const perfilesNegocio = {
+        minimarket: {
+            avance: { margen: 45, descuento: 5 },
+            temporada: { margen: 30, descuento: 15 },
+            liquidacion: { margen: 8, descuento: 40 },
+            remate: { margen: 1, descuento: 50 }
+        },
+        ferreteria: {
+            avance: { margen: 55, descuento: 0 },
+            temporada: { margen: 45, descuento: 10 },
+            liquidacion: { margen: 15, descuento: 30 },
+            remate: { margen: 5, descuento: 40 }
+        },
+        boutique: {
+            avance: { margen: 70, descuento: 0 },
+            temporada: { margen: 50, descuento: 20 },
+            liquidacion: { margen: 20, descuento: 50 },
+            remate: { margen: 5, descuento: 70 }
+        },
+        restaurante: {
+            avance: { margen: 75, descuento: 0 },
+            temporada: { margen: 70, descuento: 10 },
+            liquidacion: { margen: 20, descuento: 30 },
+            remate: { margen: 10, descuento: 50 }
+        }
+    };
+
+    // === FORMATO MONEDA ===
+    function formatoMonedaInput(input) {
+        let valor = input.value.replace(/\D/g, '');
+        if (valor === '') {
+            input.value = '';
+        } else {
+            input.value = new Intl.NumberFormat('es-CL').format(valor);
+        }
+    }
+
+    function obtenerValor(input) {
+        if (!input || !input.value) return 0;
+        return parseFloat(input.value.replace(/\./g, '').replace(',', '.')) || 0;
+    }
+
+    // === MODO COSTOS ===
+    function toggleModoCostos() {
+        const modoGlobal = document.getElementById('modoGlobal').checked;
+        const containerGlobal = document.getElementById('costosGlobalesContainer');
+        
+        containerGlobal.style.display = modoGlobal ? 'block' : 'none';
+        
+        document.querySelectorAll('[id^="producto-"]').forEach(prod => {
+            prod.querySelector('.producto-flete').disabled = modoGlobal;
+            prod.querySelector('.producto-gastos').disabled = modoGlobal;
+        });
+
+        recalcularTodosProductos();
+    }
+
+    function inputUnidades(input, id) {
+        formatoMonedaInput(input);
+        if (document.getElementById('modoGlobal').checked) {
+            recalcularTodosProductos();
+        } else {
+            calcularProducto(id);
+        }
+    }
+
+    // === APLICAR PERFIL DE NEGOCIO ===
+    function aplicarPerfilNegocio() {
+        const tipoNegocio = document.getElementById('tipoNegocio').value;
+        const perfil = perfilesNegocio[tipoNegocio];
+
+        document.querySelectorAll('.tabla-temporadas').forEach(tabla => {
+            const filas = tabla.querySelectorAll('tbody tr');
+            filas.forEach(fila => {
+                const temporada = fila.dataset.temporada;
+                if (perfil[temporada]) {
+                    fila.querySelector('.margen-input').value = perfil[temporada].margen;
+                }
+            });
+        });
+
+        recalcularTodosProductos();
+    }
+
+    // === AGREGAR PRODUCTO ===
+    function agregarProducto() {
+        contadorProductos++;
+        const tabList = document.getElementById('productTabs');
+        const tabContent = document.getElementById('productTabContent');
+
+        // Crear tab
+        const li = document.createElement('li');
+        li.className = 'nav-item';
+        li.innerHTML = `
+            <button class="nav-link" id="tab-producto-${contadorProductos}" data-bs-toggle="tab" data-bs-target="#producto-${contadorProductos}" type="button">
+                Producto ${contadorProductos}
+            </button>
+        `;
+        tabList.appendChild(li);
+
+        // Crear contenido (clonar del primero)
+        const primerProducto = document.getElementById('producto-1');
+        const nuevoProducto = primerProducto.cloneNode(true);
+        nuevoProducto.id = `producto-${contadorProductos}`;
+        nuevoProducto.className = 'tab-pane fade';
+        nuevoProducto.querySelectorAll('input').forEach(input => input.value = '');
+        nuevoProducto.querySelector('.tabla-temporadas').id = `tabla-producto-${contadorProductos}`;
+        
+        // Actualizar eventos de cálculo
+        nuevoProducto.querySelector('.producto-precio-compra').setAttribute('oninput', `formatoMonedaInput(this); calcularProducto(${contadorProductos})`);
+        nuevoProducto.querySelector('.producto-detalle').setAttribute('oninput', `actualizarNombreTab(${contadorProductos})`);
+        nuevoProducto.querySelector('.producto-unidades').setAttribute('oninput', `inputUnidades(this, ${contadorProductos})`);
+        nuevoProducto.querySelector('.producto-flete').setAttribute('oninput', `formatoMonedaInput(this); calcularProducto(${contadorProductos})`);
+        nuevoProducto.querySelector('.producto-gastos').setAttribute('oninput', `formatoMonedaInput(this); calcularProducto(${contadorProductos})`);
+        nuevoProducto.querySelector('.btn-eliminar-producto').setAttribute('onclick', `eliminarProducto(${contadorProductos}, event)`);
+        
+        const margenes = nuevoProducto.querySelectorAll('.margen-input');
+        margenes.forEach(m => m.setAttribute('oninput', `calcularProducto(${contadorProductos})`));
+        
+        const sugeridos = nuevoProducto.querySelectorAll('.precio-sugerido-input');
+        sugeridos.forEach(s => s.setAttribute('oninput', `formatoMonedaInput(this); calcularDescuentoReal(this, ${contadorProductos})`));
+
+        tabContent.appendChild(nuevoProducto);
+
+        // Aplicar perfil actual
+        aplicarPerfilNegocio();
+
+        // Estado de inputs según modo
+        const modoGlobal = document.getElementById('modoGlobal').checked;
+        nuevoProducto.querySelector('.producto-flete').disabled = modoGlobal;
+        nuevoProducto.querySelector('.producto-gastos').disabled = modoGlobal;
+
+        // Activar nueva tab
+        new bootstrap.Tab(document.getElementById(`tab-producto-${contadorProductos}`)).show();
+    }
+
+    // === ELIMINAR PRODUCTO ===
+    function eliminarProducto(id, event) {
+        event.stopPropagation();
+        if (document.querySelectorAll('#productTabs .nav-item').length === 1) {
+            alert('Debe mantener al menos un producto.');
+            return;
+        }
+        if (confirm(`¿Eliminar Producto ${id}?`)) {
+            document.getElementById(`tab-producto-${id}`).closest('.nav-item').remove();
+            document.getElementById(`producto-${id}`).remove();
+            
+            // Activar primer tab
+            const primerTab = document.querySelector('#productTabs .nav-link');
+            if (primerTab) new bootstrap.Tab(primerTab).show();
+        }
+    }
+
+    // === ACTUALIZAR NOMBRE TAB ===
+    function actualizarNombreTab(id) {
+        const input = document.querySelector(`#producto-${id} .producto-detalle`);
+        const tab = document.getElementById(`tab-producto-${id}`);
+        const nombre = input.value.trim() || `Producto ${id}`;
+        tab.innerText = nombre;
+    }
+
+    // === CALCULAR PRODUCTO ===
+    function calcularProducto(id) {
+        const container = document.getElementById(`producto-${id}`);
+        const precioCompra = obtenerValor(container.querySelector('.producto-precio-compra'));
+        
+        const unidades = obtenerValor(container.querySelector('.producto-unidades')) || 1;
+
+        // Calcular Total Compra automáticamente
+        const totalCompra = precioCompra * unidades;
+        container.querySelector('.producto-precio-compra-total').value = totalCompra > 0 ? new Intl.NumberFormat('es-CL').format(totalCompra) : '';
+
+        let fleteTotal = 0;
+        let gastosTotal = 0;
+
+        if (document.getElementById('modoGlobal') && document.getElementById('modoGlobal').checked) {
+            let totalUnidadesGlobal = 0;
+            document.querySelectorAll('[id^="producto-"]').forEach(p => {
+                totalUnidadesGlobal += obtenerValor(p.querySelector('.producto-unidades'));
+            });
+
+            const fleteGlobal = obtenerValor(document.getElementById('fleteGlobal'));
+            const gastosGlobal = obtenerValor(document.getElementById('gastosGlobal'));
+
+            if (totalUnidadesGlobal > 0) {
+                fleteTotal = (fleteGlobal / totalUnidadesGlobal) * unidades;
+                gastosTotal = (gastosGlobal / totalUnidadesGlobal) * unidades;
+            }
+
+            container.querySelector('.producto-flete').value = fleteTotal > 0 ? new Intl.NumberFormat('es-CL').format(Math.round(fleteTotal)) : 0;
+            container.querySelector('.producto-gastos').value = gastosTotal > 0 ? new Intl.NumberFormat('es-CL').format(Math.round(gastosTotal)) : 0;
+        } else {
+            fleteTotal = obtenerValor(container.querySelector('.producto-flete'));
+            gastosTotal = obtenerValor(container.querySelector('.producto-gastos'));
+        }
+
+        const fleteUnitario = unidades > 0 ? fleteTotal / unidades : 0;
+        const gastosUnitario = unidades > 0 ? gastosTotal / unidades : 0;
+        const costoUnitario = precioCompra + fleteUnitario + gastosUnitario;
+
+        // Actualizar resumen de costos
+        container.querySelector('.flete-unitario').innerText = fmt.format(fleteUnitario);
+        container.querySelector('.gastos-unitario').innerText = fmt.format(gastosUnitario);
+        container.querySelector('.costo-unitario-total').innerText = fmt.format(costoUnitario);
+
+        // Calcular cada temporada
+        const filas = container.querySelectorAll('.tabla-temporadas tbody tr');
+        filas.forEach(fila => {
+            const margen = parseFloat(fila.querySelector('.margen-input').value || 0) / 100;
+            const precioNeto = margen >= 1 ? costoUnitario * (1 + margen) : costoUnitario / (1 - margen);
+            const utilidad = precioNeto - costoUnitario;
+            const iva = precioNeto * 0.19;
+            const precioMinimo = precioNeto + iva;
+
+            fila.querySelector('.precio-neto').innerText = fmt.format(precioNeto);
+            fila.querySelector('.utilidad').innerText = fmt.format(utilidad);
+            fila.querySelector('.iva-debito').innerText = fmt.format(iva);
+            fila.querySelector('.precio-minimo').innerText = fmt.format(precioMinimo);
+
+            // Calcular precio sugerido
+            const inputSugerido = fila.querySelector('.precio-sugerido-input');
+            let sugerido = 0;
+            if (precioMinimo > 0) {
+                sugerido = Math.ceil((precioMinimo - 90) / 100) * 100 + 90;
+            }
+            inputSugerido.value = sugerido > 0 ? new Intl.NumberFormat('es-CL').format(sugerido) : '';
+            calcularDescuentoReal(inputSugerido, id);
+        });
+    }
+
+    // === CALCULAR DESCUENTO REAL ===
+    function calcularDescuentoReal(input, id) {
+        const fila = input.closest('tr');
+        const precioSugerido = obtenerValor(input);
+        const precioMinimo = obtenerValor({ value: fila.querySelector('.precio-minimo').innerText.replace(/[$\.]/g, '') });
+        
+        if (precioSugerido > 0 && precioMinimo > 0) {
+            const descuento = ((precioSugerido - precioMinimo) / precioSugerido) * 100;
+            fila.querySelector('.descuento-real').innerText = descuento.toFixed(2) + '%';
+        } else {
+            fila.querySelector('.descuento-real').innerText = '0.00%';
+        }
+    }
+
+    // === RECALCULAR TODOS ===
+    function recalcularTodosProductos() {
+        document.querySelectorAll('[id^="producto-"]').forEach(prod => {
+            const id = prod.id.split('-')[1];
+            calcularProducto(id);
+        });
+    }
+
+    // === PERSISTENCIA ===
+    function guardarDatos() {
+        const datos = {
+            configuracion: {
+                tipoNegocio: document.getElementById('tipoNegocio').value,
+                nombreNegocio: document.getElementById('nombreNegocio').value,
+                numeroOrden: document.getElementById('numeroOrden').value,
+                mesOrden: document.getElementById('mesOrden').value,
+                modoGlobal: document.getElementById('modoGlobal').checked,
+                fleteGlobal: document.getElementById('fleteGlobal').value,
+                gastosGlobal: document.getElementById('gastosGlobal').value
+            },
+            productos: []
+        };
+
+        document.querySelectorAll('[id^="producto-"]').forEach(prod => {
+            const id = prod.id.split('-')[1];
+            const detalle = prod.querySelector('.producto-detalle').value;
+            const precioCompra = prod.querySelector('.producto-precio-compra').value;
+            const precioCompraTotal = prod.querySelector('.producto-precio-compra-total').value;
+            const unidades = prod.querySelector('.producto-unidades').value;
+            const flete = prod.querySelector('.producto-flete').value;
+            const gastos = prod.querySelector('.producto-gastos').value;
+
+            const temporadas = [];
+            prod.querySelectorAll('.tabla-temporadas tbody tr').forEach(fila => {
+                temporadas.push({
+                    temporada: fila.dataset.temporada,
+                    margen: fila.querySelector('.margen-input').value,
+                    precioSugerido: fila.querySelector('.precio-sugerido-input').value
+                });
+            });
+
+            datos.productos.push({
+                id, detalle, precioCompra, precioCompraTotal, unidades, flete, gastos, temporadas
+            });
+        });
+
+        localStorage.setItem('fijacionPreciosSercotec', JSON.stringify(datos));
+    }
+
+    function cargarDatos() {
+        const json = localStorage.getItem('fijacionPreciosSercotec');
+        if (!json) return;
+
+        const datos = JSON.parse(json);
+
+        // Restaurar configuración
+        Object.keys(datos.configuracion).forEach(key => {
+            const el = document.getElementById(key);
+            if (el) el.value = datos.configuracion[key];
+        });
+
+        if (datos.configuracion.modoGlobal) {
+            document.getElementById('modoGlobal').checked = true;
+            document.getElementById('fleteGlobal').value = datos.configuracion.fleteGlobal || '';
+            document.getElementById('gastosGlobal').value = datos.configuracion.gastosGlobal || '';
+        }
+        toggleModoCostos();
+
+        // Restaurar productos (eliminar existentes excepto el primero)
+        const tabs = document.querySelectorAll('#productTabs .nav-item');
+        tabs.forEach((tab, i) => { if (i > 0) tab.remove(); });
+        const contents = document.querySelectorAll('#productTabContent .tab-pane');
+        contents.forEach((content, i) => { if (i > 0) content.remove(); });
+
+        datos.productos.forEach((prod, index) => {
+            if (index > 0) agregarProducto();
+            
+            const container = document.getElementById(`producto-${prod.id}` || `producto-${index + 1}`);
+            container.querySelector('.producto-detalle').value = prod.detalle;
+            container.querySelector('.producto-precio-compra').value = prod.precioCompra;
+            container.querySelector('.producto-precio-compra-total').value = prod.precioCompraTotal;
+            if (prod.unidades) container.querySelector('.producto-unidades').value = prod.unidades;
+            if (prod.flete) container.querySelector('.producto-flete').value = prod.flete;
+            if (prod.gastos) container.querySelector('.producto-gastos').value = prod.gastos;
+
+            prod.temporadas.forEach(temp => {
+                const fila = container.querySelector(`[data-temporada="${temp.temporada}"]`);
+                if (fila) {
+                    fila.querySelector('.margen-input').value = temp.margen;
+                    fila.querySelector('.precio-sugerido-input').value = temp.precioSugerido;
+                }
+            });
+
+            actualizarNombreTab(prod.id);
+        });
+
+        recalcularTodosProductos();
+    }
+
+    function limpiarDatos() {
+        if (confirm('¿Borrar todos los datos y reiniciar?')) {
+            localStorage.removeItem('fijacionPreciosSercotec');
+            location.reload();
+        }
+    }
+
+    function guardarProyecto() {
+        guardarDatos();
+        const json = localStorage.getItem('fijacionPreciosSercotec');
+        const blob = new Blob([json], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `FijacionPrecios_${new Date().toISOString().split('T')[0]}.json`;
+        a.click();
+    }
+
+    function cargarProyecto(input) {
+        const file = input.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            localStorage.setItem('fijacionPreciosSercotec', e.target.result);
+            cargarDatos();
+        };
+        reader.readAsText(file);
+    }
+
+    // === GENERAR PDF ===
+    function generarPDF() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF('landscape', 'mm', 'a4');
+        
+        // Encabezado
+        doc.setFontSize(18);
+        doc.setTextColor(0, 75, 141);
+        doc.text('FIJACIÓN DE PRECIOS', 148, 20, { align: 'center' });
+        
+        doc.setFontSize(10);
+        doc.setTextColor(100);
+        doc.text('Centro de Negocios Sercotec Temuco', 148, 27, { align: 'center' });
+        
+        // Línea decorativa
+        doc.setDrawColor(227, 6, 19);
+        doc.setLineWidth(1);
+        doc.line(20, 30, 277, 30);
+
+        // Información del negocio
+        doc.setFontSize(9);
+        doc.setTextColor(0);
+        const nombreNegocio = document.getElementById('nombreNegocio').value || 'Sin especificar';
+        const numeroOrden = document.getElementById('numeroOrden').value || '---';
+        const mesOrden = document.getElementById('mesOrden').value || '---';
+        const tipoNegocio = document.getElementById('tipoNegocio').selectedOptions[0].text;
+        
+        doc.text(`Negocio: ${nombreNegocio}`, 20, 38);
+        doc.text(`Orden N°: ${numeroOrden} | Mes: ${mesOrden}`, 20, 43);
+        doc.text(`Tipo: ${tipoNegocio}`, 20, 48);
+        doc.text(`Fecha: ${new Date().toLocaleDateString('es-CL')}`, 230, 38);
+
+        let yPos = 55;
+
+        // Iterar productos
+        document.querySelectorAll('[id^="producto-"]').forEach((prod, index) => {
+            const detalle = prod.querySelector('.producto-detalle').value || `Producto ${index + 1}`;
+            
+            // Título producto
+            doc.setFontSize(11);
+            doc.setTextColor(0, 75, 141);
+            doc.text(detalle.toUpperCase(), 20, yPos);
+            yPos += 7;
+
+            // Costos
+            const costoUnitario = prod.querySelector('.costo-unitario-total').innerText;
+            doc.setFontSize(8);
+            doc.setTextColor(80);
+            doc.text(`Costo Unitario Total: ${costoUnitario}`, 20, yPos);
+            yPos += 5;
+
+            // Tabla
+            const filas = [];
+            prod.querySelectorAll('.tabla-temporadas tbody tr').forEach(fila => {
+                const temporada = fila.querySelector('.temporada-tag').innerText;
+                const margen = fila.querySelector('.margen-input').value + '%';
+                const precioNeto = fila.querySelector('.precio-neto').innerText;
+                const utilidad = fila.querySelector('.utilidad').innerText;
+                const iva = fila.querySelector('.iva-debito').innerText;
+                const precioMinimo = fila.querySelector('.precio-minimo').innerText;
+                const precioSugerido = fmt.format(obtenerValor(fila.querySelector('.precio-sugerido-input')));
+                const descuento = fila.querySelector('.descuento-real').innerText;
+
+                filas.push([temporada, margen, precioNeto, utilidad, iva, precioMinimo, precioSugerido, descuento]);
+            });
+
+            doc.autoTable({
+                startY: yPos,
+                head: [['Temporada', 'Margen', 'P. Neto', 'Utilidad', 'IVA', 'P. Mínimo', 'P. Sugerido', 'Desc.']],
+                body: filas,
+                theme: 'grid',
+                headStyles: { fillColor: [0, 75, 141], fontSize: 8 },
+                bodyStyles: { fontSize: 7 },
+                margin: { left: 20, right: 20 }
+            });
+
+            yPos = doc.lastAutoTable.finalY + 10;
+
+            if (yPos > 180 && index < document.querySelectorAll('[id^="producto-"]').length - 1) {
+                doc.addPage();
+                yPos = 20;
+            }
+        });
+
+        // Footer
+        const totalPaginas = doc.internal.getNumberOfPages();
+        for (let i = 1; i <= totalPaginas; i++) {
+            doc.setPage(i);
+            doc.setFontSize(8);
+            doc.setTextColor(150);
+            doc.text(`Página ${i} de ${totalPaginas}`, 148, 200, { align: 'center' });
+            doc.text('Generado con Herramientas CDN Sercotec Temuco', 148, 205, { align: 'center' });
+        }
+
+        const fecha = new Date().toISOString().split('T')[0];
+        doc.save(`FijacionPrecios_${nombreNegocio.replace(/ /g, '_')}_${fecha}.pdf`);
+    }
+
+    // === INICIALIZACIÓN ===
+    document.addEventListener('DOMContentLoaded', () => {
+        cargarDatos();
+        aplicarPerfilNegocio();
+    });
+
+    document.addEventListener('input', guardarDatos);
+    document.addEventListener('change', guardarDatos);
+</script>
+</body>
+</html>
